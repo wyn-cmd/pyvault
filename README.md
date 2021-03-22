@@ -8,4 +8,5 @@ os,sys,hashlib,getpass,pyAesCrypt
 Go into terminal and type
 * git clone https://github.com/wyn-cmd/pycrypt
 * cd pycrypt
+* python3 -m pip install -r requirements.txt
 * python3 pyvault.py
