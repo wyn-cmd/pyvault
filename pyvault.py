@@ -37,7 +37,7 @@ def delete(file): #securely erase files
             break
         num+=1
 
-def auth(): #wuthenticate the password in case of sef-destruct
+def auth(): #wuthenticate the password in case of self-destruct
     key=getpass.getpass(prompt='Password:',stream=None) #gets password
     keyc=len(key)
     if keyc<9:
