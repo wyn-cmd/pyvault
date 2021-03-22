@@ -49,7 +49,7 @@ def auth(): #wuthenticate the password in case of self-destruct
 
 def seed(): #get the seed for the hashing algorithm
     while True:
-        seed=getpass.getpass(prompt='seed:',stream=None) #gets seed
+        seed=getpass.getpass(prompt='Seed:',stream=None) #gets seed
         if seed=='help':
             print(seed_help)
             i=input('>')
@@ -146,10 +146,10 @@ elif vault_vulnerable==True:
             cli('This password cannot be used as it is the self destruct password')
         else:
             break
-    print('input seed as double confirmation')
+    print('Input seed as double confirmation')
     key=hashing_algorithm(key,seed())
     encrypt(key)
-    cli('vault successfully encrypted!')
+    cli('Vault successfully encrypted!')
     
 else:
     setup()
