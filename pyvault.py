@@ -1,11 +1,13 @@
+#!/usr/bin/env python3
 import os,sys,hashlib,getpass,pyAesCrypt
 #data buffer
-buff=1024*1024*64
+buff=1024*1024*128
 #help message for seed
 os.system('touch .help.txt')
 seed_help=open('.help.txt','r').read()
 #self-destruct password
-self_password='passwordhack' 
+os.system('touch .hash.txt')
+self_password=open('.hash.txt','r').read() 
 #vault's logo
 vault_logo='''
          __
@@ -30,10 +32,10 @@ def delete(file): #securely erase files
     open('forenstic.dat','w').write(txt)
     num=0
     while True:
-        txt+='............................................................................................................................................................'
-        open('forenstic.dat','a').write(txt) #writes data to a file to remove traces of the deleted file
-        if num>7599:
-            os.system('rm -rf forenstic.dat')
+        txt+='.............................'
+        open('forenstic.dat','w').write(txt) #writes data to a file to remove traces of the deleted file
+        os.system('rm -rf forenstic.dat')
+        if num>199:
             break
         num+=1
 
@@ -43,7 +45,7 @@ def auth(): #wuthenticate the password in case of self-destruct
     if keyc<9:
         print('password is minimum of 9 characters')
         sys.exit()
-    elif key==self_password: #self-destruct password
+    elif str(hashlib.sha256(key.encode('utf8')).hexdigest())==self_password: #self-destruct password
         return(False)
     return(key)
 
@@ -62,7 +64,6 @@ def hashing_algorithm(key,seed):
     key=hashlib.sha224(key.encode('utf8')).hexdigest()
     key=hashlib.sha256(key.encode('utf8')).hexdigest()
     return(key)
-    
 
 
 def decrypt(key,seed): #decypt data
@@ -76,16 +77,20 @@ def decrypt(key,seed): #decypt data
 def encrypt(key):
     cli('encrypting data...')
     os.system('mkdir vault')
-    os.system('zip vault -r vault')
+    os.system('zip vault -0 -r vault')
     delete('vault')
     pyAesCrypt.encryptFile('vault.zip','.vault.encrypt',key,1024*1024*128) #decrypt with AES-256 to get zip file
     os.system('rm -rf vault')
     delete('vault.zip')
 
 def setup():
-    cli('creating file...')
+    cli('Creating file...')
     os.system('mkdir vault')
-    cli('Creating file...***\n***Input password to lock the Vault')
+    cli('Set self-destruct password')
+    self_password=input('Pass:')
+    self_password=str(hashlib.sha256(self_password.encode('utf8')).hexdigest())
+    open('.hash.txt','w').write(self_password)
+    cli('Input password to lock the Vault')
     while True:
         key=getpass.getpass(prompt='Password:',stream=None) #gets password
         keyc=len(key)
@@ -94,17 +99,17 @@ def setup():
             sys.exit()
         elif key==self_password: #self-destruct password
             cli('This password cannot be used as it is the self destruct password')
-            print('input seed as double confirmation')
+            print('Input seed as double confirmation')
         else:
             break
     key=hashing_algorithm(key,seed())
     encrypt(key)
-    cli('file successfully encrypted!')
+    cli('File successfully encrypted!')
     i=input('>')
-    cli('input help for remembering the seed')
+    cli('Input help for remembering the seed')
     seed_help=input('>')
     open('.help.txt','w').write(seed_help)
-    cli('run the program again to decrypt the Vault')
+    cli('Run the program again to decrypt the Vault')
     return
 
 attempt=4
@@ -130,9 +135,13 @@ if vault_file==True:
                     cli('Vault erased') #erase after max tries
                     break
                 if attempt<2:
-                    cli(f'Vault is locked***\n***{attempt} attempt remaining')
+                    cli('Vault is locked')
+                    i=input('>')
+                    cli('1 attempt remaining')
                 elif attempt>1:
-                    cli(f'Vault is locked***\n***{attempt} attempts remaining')
+                    cli('Vault is locked')
+                    i=input('>')
+                    cli(f'{attempt} attempts remaining')
                 i=input('>')
 elif vault_vulnerable==True:
     cli('Input password to lock the Vault')
@@ -142,7 +151,7 @@ elif vault_vulnerable==True:
         if keyc<9:
             print('password must be minimum of 9 characters')
             sys.exit()
-        elif key==self_password: #self-destruct password
+        elif str(hashlib.sha256(key.encode('utf8')).hexdigest())==self_password: #self-destruct password
             cli('This password cannot be used as it is the self destruct password')
         else:
             break
@@ -155,4 +164,6 @@ else:
     setup()
     
     
+    
+
     
