@@ -79,7 +79,7 @@ def encrypt(key):
     os.system('zip vault -r vault')
     delete('vault')
     pyAesCrypt.encryptFile('vault.zip','.vault.encrypt',key,1024*1024*128) #decrypt with AES-256 to get zip file
-    delete('vault')
+    os.system('rm -rf vault')
     delete('vault.zip')
 
 def setup():
