@@ -1,5 +1,5 @@
 # pyvault
-A secure AES-256 file encryptor that utilises two passwords
+A secure AES-256 file encryptor that utilises a password and seed.
 
 # modules
 os,sys,hashlib,getpass,pyAesCrypt
@@ -9,4 +9,5 @@ Go into terminal and type
 * git clone https://github.com/wyn-cmd/pycrypt
 * cd pycrypt
 * python3 -m pip install -r requirements.txt
-* python3 pyvault.py
+* chmod +x pyvault.py
+* ./pyvault.py
