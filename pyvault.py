@@ -19,8 +19,8 @@ vault_logo='''
   \#####|##|#####/
   /\#####\/#####/\ 
   \/\##########/\/
-      ""|  |""
-         ""
+        |__|
+         
 '''
 def cli(txt): #create the CLI interface
     os.system('clear')
